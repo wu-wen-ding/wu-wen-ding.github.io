@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="hello_pwn老惯例放进Linux康康 可见是个64位，且没有金丝雀（狂喜 ）放进ida64康康这有个read函数，进去康康分析main函数 要使dword_60106C &#x3D;&#x3D; 1853186401 才能得到flag但我们只能给unk_601068赋值，怎么办？这就用上栈溢出了，让我们再看看堆栈两者之间差（ox6c-0x68）这之间数据填满；让unk_601068的值占到dword_60106">
+  <meta name="description" content="hello_pwn老惯例放进Linux康康 可见是个64位，且没有金丝雀（狂喜 ）放进ida64康康">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://example.com/2021/01/21/wp2/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="hello_pwn老惯例放进Linux康康 可见是个64位，且没有金丝雀（狂喜 ）放进ida64康康这有个read函数，进去康康分析main函数 要使dword_60106C &#x3D;&#x3D; 1853186401 才能得到flag但我们只能给unk_601068赋值，怎么办？这就用上栈溢出了，让我们再看看堆栈两者之间差（ox6c-0x68）这之间数据填满；让unk_601068的值占到dword_60106">
+<meta property="og:description" content="hello_pwn老惯例放进Linux康康 可见是个64位，且没有金丝雀（狂喜 ）放进ida64康康">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210121223341392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210121223803947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210121224001524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20210121224644349.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2021-01-21T14:30:31.183Z">
-<meta property="article:modified_time" content="2021-01-21T14:48:07.744Z">
+<meta property="article:modified_time" content="2021-01-22T16:28:51.780Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210121223341392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
@@ -169,7 +169,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="hello-pwn"><a href="#hello-pwn" class="headerlink" title="hello_pwn"></a><strong><em>hello_pwn</em></strong></h1><p>老惯例放进Linux康康</p>
-<p><img src="https://img-blog.csdnimg.cn/20210121223341392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可见是个64位，且没有金丝雀（<del>狂喜</del> ）<br>放进ida64康康<br><img src="https://img-blog.csdnimg.cn/20210121223803947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这有个read函数，进去康康<br>分析main函数 要使dword_60106C == 1853186401 才能得到flag<br>但我们只能给unk_601068赋值，怎么办？<br>这就用上栈溢出了，让我们再看看堆栈<br><img src="https://img-blog.csdnimg.cn/20210121224001524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>两者之间差（ox6c-0x68）这之间数据填满；让unk_601068的值占到dword_60106C的位置<br>开始写脚本<br><img src="https://img-blog.csdnimg.cn/20210121224644349.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>  比较<del>简单</del> </p>
+<p><img src="https://img-blog.csdnimg.cn/20210121223341392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可见是个64位，且没有金丝雀（<del>狂喜</del> ）<br>放进ida64康康 <a id="more"></a><br><img src="https://img-blog.csdnimg.cn/20210121223803947.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这有个read函数，进去康康<br>分析main函数 要使dword_60106C == 1853186401 才能得到flag<br>但我们只能给unk_601068赋值，怎么办？<br>这就用上栈溢出了，让我们再看看堆栈<br><img src="https://img-blog.csdnimg.cn/20210121224001524.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>两者之间差（ox6c-0x68）这之间数据填满；让unk_601068的值占到dword_60106C的位置<br>开始写脚本<br><img src="https://img-blog.csdnimg.cn/20210121224644349.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>  比较<del>简单</del> </p>
 
       
 
